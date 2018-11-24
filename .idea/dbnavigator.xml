@@ -25,7 +25,8 @@
     <show-object-properties value="true" />
     <loaded-nodes>
       <connection connection-id="656d0dda-328d-4c57-a78e-e6e404c93d77">
-        <schema name="dbtodolist" object-types="column, function, table, view" />
+        <schema name="dbtodolist" object-types="column, constraint, function, index, procedure, table, dataset trigger, view" />
+        <schema name="mysql" object-types="function, procedure, table, view" />
       </connection>
     </loaded-nodes>
   </component>
@@ -36,6 +37,9 @@
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="656d0dda-328d-4c57-a78e-e6e404c93d77" />
+  </component>
+  <component name="DBNavigator.Project.DatasetFilterManager">
+    <filter-list connection-id="656d0dda-328d-4c57-a78e-e6e404c93d77" dataset="dbtodolist.tbllistitem" active-filter-id="" />
   </component>
   <component name="DBNavigator.Project.EditorStateManager">
     <last-used-providers />

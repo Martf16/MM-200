@@ -4,33 +4,64 @@
     <meta charset="UTF-8">
     <title>List</title>
     <link rel="stylesheet" href="stylesheets/xmas_design_list_portrait.css">
+    <script src="javascripts/site.js"></script>
     <h1>XMAS<br/>SHOPPING</h1>
 </head>
 <body>
-<fieldset>
-    <br/><label>MY SHOPPING LIST</label><br/><br/>
-    <button style="width: 70px; height: 80px">🗑</button>
-    <button style="width: 70px; height: 80px">✓</button>&nbsp;
-    <input type="text" name="listitem" id="listitem" value=" 2XU Compression Tights"> &nbsp;☰<br/>
-    <p>⌛ DUE 12.22.18</p>
-    <button style="width: 70px; height: 80px">🗑</button>
-    <button style="width: 70px; height: 80px">✓</button>&nbsp;
-    <input type="text" name="listitem" id="listitem" value=" Bose QC35 Headset"> &nbsp;☰<br/>
-    <p>⌛ DUE 12.22.18</p>
-    <button style="width: 70px; height: 80px">🗑</button>
-    <button style="width: 70px; height: 80px">✓</button>&nbsp;
-    <input type="text" name="listitem" id="listitem" value=" 5 ingredienser - Jamie Oliver"> &nbsp;☰<br/>
-    <p>⌛ DUE 12.15.18</p>
-    <button style="width: 70px; height: 80px">🗑</button>
-    <button style="width: 70px; height: 80px">✓</button>&nbsp;
-    <input type="text" name="listitem" id="listitem" value=" 10 delers bakesett"> &nbsp;☰<br/>
-    <p>⌛ DUE 12.22.18</p>
-    <button style="width: 70px; height: 80px">🗑</button>
-    <button style="width: 70px; height: 80px">✓</button>&nbsp;
-    <input type="text" name="listitem" id="listitem" value=" Anastasia Glow Kit Ultimate"> &nbsp;☰<br/>
-    <p>⌛ DUE 12.22.18</p>
-    <br/><button>EMPTY</button>&nbsp;&nbsp;&nbsp;&nbsp;<button>ADD ITEM</button><br/>
 
-</fieldset><br/>
+<fieldset id="container">
+    <br/><label>MY SHOPPING LIST</label><br/><br/>
+</fieldset>
+<br/><button>EMPTY</button>&nbsp;&nbsp;&nbsp;&nbsp;<button>ADD ITEM</button><br/><br/>
+<template id="viewListItem">
+    <button class="btnIcon">🗑</button>
+    <button class="btnIcon">✓</button>&nbsp;
+    <input type="text" name="listItem" id="txtDescription" value=" Bose QC35 Headset"> &nbsp;☰<br/>
+    <p>⌛ <span id="txtDateDue">12.22.18</span></p>
+</template>
+<script>
+    let authenticationToken = "";
+    let authenticatedUser = null;
+
+    window.onload = function(){
+        authenticationToken = localStorage.getItem("authenticationToken");
+        authenticatedUser =  JSON.parse(localStorage.getItem("authenticatedUser"));
+        getList();
+    };
+
+    function getList(){
+        let url = "/api/list?fdUserID=" + authenticatedUser.fdUserID.toString();
+        let request = {
+            method: "GET",
+            /*query:{fdUserID: authenticatedUser.fdUserID},*/
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-auth': authenticationToken
+            }
+        };
+        fetch(url, request).then(function (res) {
+            if (res.status < 400) {
+                return res.json();
+            } else {
+                return Promise.reject(new Error("Session not valid. log inn again"));
+            }
+        }).then(function (json) {
+            showList(json);
+        }).catch(function (err) {
+            //displayError(err.message);
+        });
+
+    }
+
+    function showList(aList){
+        for(let index = 0; index < aList.length; index++){
+            let template = getTemplate("viewListItem");
+            template.querySelector("#txtDescription").value = aList[index].fdDescription;
+            template.querySelector("#txtDateDue").value = aList[index].fdDateDue;
+            document.getElementById("container").appendChild(template);
+        }
+    }
+</script>
 </body>
 </html>

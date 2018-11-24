@@ -5,6 +5,7 @@
     <title>Log in</title>
 
     <link rel="stylesheet" href="stylesheets/xmas_design_login_portrait.css">
+    <script src="javascripts/site.js"></script>
 </head>
 <body>
     <div id="divContainer">'
@@ -26,7 +27,6 @@
     </template>
 </body>
 <script>
-    const DEBUG = true;
     let authenticationToken = "";
     let authenticatedUser = "";
 
@@ -73,6 +73,8 @@
         }).then(function (responseJSON) {
             authenticationToken = responseJSON.auth; // Because this is where the server puts the token.
             authenticatedUser = responseJSON.user; // Information about the user.
+            localStorage.setItem("authenticationToken", authenticationToken);
+            localStorage.setItem("authenticatedUser", JSON.stringify(authenticatedUser));
             //Bruker er logget inn og vi kan hente liste siden;
             getListPage();
         }).catch(function (err) {
@@ -82,7 +84,7 @@
     }
     //------------------------------------------------------------------------------------------------------------------
 
-    function getListPage(){
+    function getListPage() {
         let formLogin = document.getElementById("formLogin");
         document.getElementById("_auth").value = authenticationToken;
         document.getElementById("_UserID").value = authenticatedUser.fdUserID;
@@ -90,35 +92,6 @@
         formLogin.submit()
 
     }
-
-    function getTemplate(aId) {
-        let template = document.getElementById(aId);
-        template = document.importNode(template.content, true);
-        return template;
-    }
-    //------------------------------------------------------------------------------------------------------------------
-
-    function clearContainer() {
-        let container = document.getElementById("divContainer");
-        while (container.firstChild) {
-            container.removeChild(container.firstChild);
-        }
-    }
-    //------------------------------------------------------------------------------------------------------------------
-
-    function addToContainer(aView) {
-        document.getElementById("divContainer").appendChild(aView);
-    }
-    //------------------------------------------------------------------------------------------------------------------
-
-    function log(...messages) {
-        if (DEBUG) {
-            messages.forEach(msg => {
-                console.log(msg);
-            })
-        }
-    }
-    //------------------------------------------------------------------------------------------------------------------
 
 </script>
 </html>

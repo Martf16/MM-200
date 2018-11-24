@@ -7,6 +7,15 @@ h1{
 
 }
 
+.btnIcon{
+    height: 80px;
+    width: 70px;
+    font-size: 40px;
+    border-radius: 50px;
+    background-color: peachpuff;
+    color: darkred;
+}
+
 button{
     height: 90px;
     width: 350px;
